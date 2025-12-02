@@ -48,6 +48,7 @@ export interface Transaction {
 }
 
 export interface Advantage {
+  empresa_parceira: any
   id: string
   companyId: string
   companyName: string
