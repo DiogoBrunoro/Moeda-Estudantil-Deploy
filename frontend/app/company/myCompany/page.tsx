@@ -5,6 +5,7 @@ import DashboardLayout from "@/components/dashboard-layout"
 import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import { Email } from "@mui/icons-material"
+import apiUrl from "../../../api/apiUrl";
 
 export default function CompanyProfilePage() {
   const [loading, setLoading] = useState(true)
@@ -27,7 +28,7 @@ export default function CompanyProfilePage() {
           return
         }
 
-        const response = await fetch("http://localhost:8080/api/empresa/perfil", {
+        const response = await fetch(`${apiUrl}/empresa/perfil`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -62,7 +63,7 @@ export default function CompanyProfilePage() {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch("http://localhost:8080/api/empresa", {
+      const response = await fetch(`${apiUrl}/empresa`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

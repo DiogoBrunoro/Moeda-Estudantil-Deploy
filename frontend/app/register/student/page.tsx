@@ -11,6 +11,7 @@ import Link from "next/link"
 import { getAllInstituicoes } from "@/api/instituicoesApi"
 import { Institution } from "@/types"
 import { useNotification } from "@/context/NotificationContext"
+import apiUrl from "../../../api/apiUrl";
 
 const mockCourses = [
   { value: "eng-software", label: "Engenharia de Software" },
@@ -56,7 +57,7 @@ export default function StudentRegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register/aluno", {
+      const response = await fetch(`${apiUrl}/auth/register/aluno`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

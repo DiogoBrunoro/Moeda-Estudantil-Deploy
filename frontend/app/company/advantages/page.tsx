@@ -7,6 +7,7 @@ import Button from "@/components/button"
 import { useRouter } from "next/navigation"
 import { Advantage } from "@/types"
 import { useNotification } from "@/context/NotificationContext"
+import apiUrl from "../../../api/apiUrl";
 
 
 export default function CompanyAdvantagesPage() {
@@ -28,7 +29,7 @@ export default function CompanyAdvantagesPage() {
         }
 
         // Buscar empresa
-        const perfilRes = await fetch("http://localhost:8080/api/empresa/perfil", {
+        const perfilRes = await fetch(`${apiUrl}/empresa/perfil`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!perfilRes.ok) throw new Error("Erro ao buscar perfil da empresa")
@@ -36,7 +37,7 @@ export default function CompanyAdvantagesPage() {
         setCompanyName(perfilData.nome)
 
         // Buscar vantagens
-        const res = await fetch("http://localhost:8080/api/empresa/vantagens", {
+        const res = await fetch(`${apiUrl}/empresa/vantagens`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!res.ok) throw new Error("Erro ao buscar vantagens")
@@ -128,6 +129,7 @@ export default function CompanyAdvantagesPage() {
                   imageUrl: adv.imageUrl || "/placeholder.svg",
                   quantidade: adv.quantidade,
                   estoque: adv.estoque,
+                  empresa_parceira: { nome: companyName },
                 }}
                 onEdit={() => router.push(`/company/advantages/edit?id=${adv.id}`)}
               />

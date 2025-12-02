@@ -6,6 +6,7 @@ import AuthLayout from "@/components/auth-layout"
 import AuthForm from "@/components/auth-form"
 import TextField from "@/components/text-field"
 import { useNotification } from "@/context/NotificationContext"
+import apiUrl from "../../api/apiUrl";
 
 function ResetPasswordContent() {
   const [password, setPassword] = useState("")
@@ -46,7 +47,7 @@ function ResetPasswordContent() {
     setLoading(true)
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/reset-password", {
+      const res = await fetch(`${apiUrl}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, new_password: password }),

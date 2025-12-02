@@ -6,6 +6,7 @@ import AuthLayout from "@/components/auth-layout"
 import AuthForm from "@/components/auth-form"
 import TextField from "@/components/text-field"
 import { useNotification } from "@/context/NotificationContext"
+import apiUrl from "../../api/apiUrl";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
@@ -19,7 +20,7 @@ export default function ForgotPasswordPage() {
 
     try {
       // Endpoint sugerido baseada no seu padrão de login
-      const res = await fetch("http://localhost:8080/api/auth/forgot-password", {
+      const res = await fetch(`${apiUrl}/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

@@ -4,13 +4,16 @@ import { useState, useEffect } from "react"
 import DashboardLayout from "@/components/dashboard-layout"
 import TextField from "@/components/text-field"
 import Button from "@/components/button"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import apiUrl from "../../../../api/apiUrl"
 
-export default function EditAdvantagePage() {
-  const router = useRouter() 
-  const searchParams = useSearchParams() 
-  const id = searchParams.get("id")
+interface PageProps {
+  params: { id: string }
+}
 
+export default function EditAdvantagePage({ params }: PageProps) {
+  const id = params.id
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [company, setCompany] = useState<any>(null)
   const [loadingData, setLoadingData] = useState(true)
@@ -24,13 +27,9 @@ export default function EditAdvantagePage() {
   })
 
   useEffect(() => {
+    if (!id) return
     const fetchData = async () => {
       try {
-        if (!id) {
-          setLoadingData(false)
-          return
-        }
-
         const token = localStorage.getItem("token")
         if (!token) {
           alert("Token não encontrado. Faça login novamente.")
@@ -38,19 +37,16 @@ export default function EditAdvantagePage() {
           return
         }
 
-        // Buscar perfil da empresa
-        const perfilRes = await fetch("http://localhost:8080/api/empresa/perfil", {
+        const perfilRes = await fetch(`${apiUrl}/empresa/perfil`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!perfilRes.ok) throw new Error("Erro ao buscar perfil")
         const perfilData = await perfilRes.json()
         setCompany(perfilData)
 
-        // Buscar vantagem
-        const vantRes = await fetch(`http://localhost:8080/api/empresa/vantagens/${id}`, {
+        const vantRes = await fetch(`${apiUrl}/empresa/vantagens/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
-
         if (!vantRes.ok) throw new Error("Erro ao buscar vantagem")
         const vant = await vantRes.json()
 
@@ -59,9 +55,7 @@ export default function EditAdvantagePage() {
           descricao: vant.descricao ?? "",
           custo_moedas: String(vant.custoMoedas ?? vant.custo_moedas ?? ""),
           foto_url: vant.fotoURL ?? vant.foto_url ?? "",
-          quantidade: String(
-            vant.quantidade ?? ""
-          ),
+          quantidade: String(vant.quantidade ?? ""),
         })
       } catch (err) {
         console.error("❌ Erro ao carregar dados:", err)
@@ -70,7 +64,6 @@ export default function EditAdvantagePage() {
         setLoadingData(false)
       }
     }
-
     fetchData()
   }, [id, router])
 
@@ -98,12 +91,11 @@ export default function EditAdvantagePage() {
         quantidade: parseInt(formData.quantidade),
       }
 
-      // 🔹 VALIDAÇÃO ATUALIZADA
       if (isNaN(payload.custo_moedas) || isNaN(payload.quantidade)) {
         throw new Error("Custo em moedas e Quantidade devem ser números válidos.")
       }
 
-      const response = await fetch(`http://localhost:8080/api/empresa/vantagens/${id}`, {
+      const response = await fetch(`${apiUrl}/empresa/vantagens/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -128,9 +120,7 @@ export default function EditAdvantagePage() {
   if (loadingData || !company) {
     return (
       <DashboardLayout userType="company" userName="Carregando...">
-        <div className="text-center mt-20 text-gray-500">
-          Carregando informações...
-        </div>
+        <div className="text-center mt-20 text-gray-500">Carregando informações...</div>
       </DashboardLayout>
     )
   }
@@ -143,16 +133,8 @@ export default function EditAdvantagePage() {
           <p className="text-gray-600">Atualize os dados da vantagem</p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm space-y-6"
-        >
-          <TextField
-            label="Título da vantagem"
-            value={formData.titulo}
-            onChange={(v) => updateField("titulo", v)}
-            required
-          />
+        <form onSubmit={handleSubmit} className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm space-y-6">
+          <TextField label="Título da vantagem" value={formData.titulo} onChange={(v) => updateField("titulo", v)} required />
 
           <TextField
             label="Descrição"
@@ -164,30 +146,11 @@ export default function EditAdvantagePage() {
           />
 
           <div className="flex flex-col sm:flex-row gap-6">
-            <TextField
-              label="Custo em moedas"
-              type="number"
-              value={formData.custo_moedas}
-              onChange={(v) => updateField("custo_moedas", v)}
-              required
-            />
-
-            <TextField
-              label="Quantidade Disponível (Estoque)"
-              type="number"
-              value={formData.quantidade}
-              onChange={(v) => updateField("quantidade_disponivel", v)}
-              placeholder="Ex: 50"
-              required
-            />
+            <TextField label="Custo em moedas" type="number" value={formData.custo_moedas} onChange={(v) => updateField("custo_moedas", v)} required />
+            <TextField label="Quantidade Disponível (Estoque)" type="number" value={formData.quantidade} onChange={(v) => updateField("quantidade", v)} placeholder="Ex: 50" required />
           </div>
 
-          <TextField
-            label="URL da imagem"
-            value={formData.foto_url}
-            onChange={(v) => updateField("foto_url", v)}
-            required
-          />
+          <TextField label="URL da imagem" value={formData.foto_url} onChange={(v) => updateField("foto_url", v)} required />
 
           {formData.foto_url && (
             <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -204,11 +167,7 @@ export default function EditAdvantagePage() {
           )}
 
           <div className="flex gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/company/advantages")}
-            >
+            <Button type="button" variant="outline" onClick={() => router.push("/company/advantages")}>
               Cancelar
             </Button>
             <Button type="submit" disabled={loading}>

@@ -5,7 +5,7 @@ import DashboardLayout from "@/components/dashboard-layout"
 import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import { useRouter } from "next/navigation"
-
+import apiUrl from "../../../../api/apiUrl";
 
 
 
@@ -33,7 +33,7 @@ export default function NewAdvantagePage() {
           return
         }
 
-        const response = await fetch("http://localhost:8080/api/empresa/perfil", {
+        const response = await fetch(`${apiUrl}/empresa/perfil`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ export default function NewAdvantagePage() {
         throw new Error("Custo em moedas e Quantidade devem ser números válidos.")
       }
 
-      const response = await fetch("http://localhost:8080/api/empresa/vantagens", {
+      const response = await fetch(`${apiUrl}/empresa/vantagens`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

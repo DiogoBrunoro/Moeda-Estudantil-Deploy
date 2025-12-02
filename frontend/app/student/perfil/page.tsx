@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import DashboardLayout from "@/components/dashboard-layout"
 import TextField from "@/components/text-field"
 import Button from "@/components/button"
+import apiUrl from "../../../api/apiUrl";
 
 export default function AlunoProfilePage() {
   const [loading, setLoading] = useState(true)
@@ -11,6 +12,7 @@ export default function AlunoProfilePage() {
   const [editMode, setEditMode] = useState(false)
   const [isSaving, setIsSaving] = useState(false) 
   const [isDeleting, setIsDeleting] = useState(false) 
+  
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -31,7 +33,7 @@ export default function AlunoProfilePage() {
           return
         }
 
-        const response = await fetch("http://localhost:8080/api/aluno/perfil", {
+        const response = await fetch(`${apiUrl}/aluno/perfil`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -71,7 +73,7 @@ export default function AlunoProfilePage() {
     setIsSaving(true) 
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch("http://localhost:8080/api/aluno", {
+      const response = await fetch(`${apiUrl}/aluno`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +116,7 @@ export default function AlunoProfilePage() {
     setIsDeleting(true) // <-- ATIVA O LOADING
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch("http://localhost:8080/api/aluno", {
+      const response = await fetch(`${apiUrl}/aluno`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import DashboardLayout from "@/components/dashboard-layout"
 import TransactionItem from "@/components/transaction-item"
 import type { Professor, Transaction } from "@/types"
+import apiUrl from "../../../api/apiUrl";
 
 export default function ProfessorTransactionsPage() {
   const [filter, setFilter] = useState<"all" | "send" | "receive">("all")
@@ -18,7 +19,7 @@ export default function ProfessorTransactionsPage() {
         const token = localStorage.getItem("token")
 
         // 1️⃣ Busca perfil do professor
-        const profileRes = await fetch("http://localhost:8080/api/professor/perfil", {
+        const profileRes = await fetch(`${apiUrl}/professor/perfi`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!profileRes.ok) throw new Error("Erro ao carregar perfil")
@@ -26,7 +27,7 @@ export default function ProfessorTransactionsPage() {
         console.log("ProfileData", profileData)
         setProfessor(profileData)
 
-        const transRes = await fetch("http://localhost:8080/api/professor/extrato", {
+        const transRes = await fetch(`${apiUrl}/professor/extrato`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!transRes.ok) throw new Error("Erro ao carregar extrato")

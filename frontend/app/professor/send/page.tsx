@@ -8,6 +8,7 @@ import Button from "@/components/button"
 import StudentSearch from "@/components/student-search"
 import { useRouter } from "next/navigation"
 import type { Transaction, Student } from "@/types"
+import apiUrl from "../../../api/apiUrl";
 
 interface Professor {
   nome: string
@@ -30,7 +31,7 @@ export default function ProfessorSendPage() {
         const token = localStorage.getItem("token")
         if (!token) throw new Error("Token não encontrado")
 
-        const res = await fetch("http://localhost:8080/api/professor/perfil", {
+        const res = await fetch(`${apiUrl}/professor/perfil`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -88,7 +89,7 @@ export default function ProfessorSendPage() {
       if (!token) throw new Error("Token não encontrado")
   console.log("Enviando aluno:", selectedStudent?.id)
 
-      const res = await fetch("http://localhost:8080/api/professor/enviar-moedas", {
+      const res = await fetch(`${apiUrl}/professor/enviar-moedas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

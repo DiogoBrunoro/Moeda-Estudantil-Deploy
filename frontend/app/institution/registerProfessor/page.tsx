@@ -7,6 +7,7 @@ import TextField from "@/components/text-field"
 import SelectField from "@/components/select-field"
 import Button from "@/components/button"
 import Link from "next/link"
+import apiUrl from "../../../api/apiUrl";
 
 const mockDepartments = [
   { value: "eng-software", label: "Engenharia de Software" },
@@ -64,7 +65,7 @@ export default function ProfessorRegisterPage() {
     try {
       const token = localStorage.getItem("token")
 
-      const response = await fetch("http://localhost:8080/api/instituicao/professores", {
+      const response = await fetch(`${apiUrl}/instituicao/professores`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

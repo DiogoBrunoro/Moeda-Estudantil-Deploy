@@ -9,6 +9,7 @@ import SelectField from "@/components/select-field"
 import Button from "@/components/button"
 import Link from "next/link"
 import { useNotification } from "@/context/NotificationContext"
+import apiUrl from "../../../api/apiUrl";
 
 const mockInstitutions = [
   { value: "puc", label: "PUC Minas" },
@@ -52,7 +53,7 @@ export default function ProfessorRegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register/professor", {
+      const response = await fetch(`${apiUrl}/auth/register/professor`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

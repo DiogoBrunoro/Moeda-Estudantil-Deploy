@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import type { Student } from "@/types"
+import apiUrl from "../api/apiUrl";
 
 interface StudentSearchProps {
   onSelect: (student?: Partial<Student>) => void
@@ -31,7 +32,7 @@ export default function StudentSearch({ onSelect, selectedStudent }: StudentSear
         console.log("Token:", token)
         if (!token) throw new Error("Token não encontrado")
 
-        const res = await fetch(`http://localhost:8080/api/professor/prefix?prefix=${query}`, {
+        const res = await fetch(`${apiUrl}/professor/prefix?prefix=${query}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 

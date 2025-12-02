@@ -1,15 +1,15 @@
 "use client"
+
+import type React from "react"
 import AuthLayout from "@/components/auth-layout"
 import Button from "@/components/button"
-import RegisterForm from "@/components/register-form"
 import TextField from "@/components/text-field"
 import { useNotification } from "@/context/NotificationContext"
 import Link from "next/link"
-import { useRouter } from "next/router"
 import { useState } from "react"
+import apiUrl from "../../../api/apiUrl";
 
 export default function CompanyRegisterPage() {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const { showNotification } = useNotification()
   const [formData, setFormData] = useState({
@@ -27,13 +27,13 @@ export default function CompanyRegisterPage() {
     setLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
-      showNotification("As senhas não coincidem", "error");
+      showNotification("As senhas não coincidem", "error")
       setLoading(false)
       return
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register/empresa", {
+      const response = await fetch(`${apiUrl}/auth/register/empresa`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -44,25 +44,24 @@ export default function CompanyRegisterPage() {
           endereco: formData.address,
         }),
       })
-
-
+    
       if (!response.ok) {
         const errorData = await response.json()
-        showNotification(errorData || "Erro ao criar empresa", "error");
+        showNotification(errorData?.message || "Erro ao criar empresa", "error")
         setLoading(false)
         return
       }
-
-      showNotification("Empresa criado com sucesso!", "success");
-      router.push("/login")
+    
+      showNotification("Empresa criada com sucesso!", "success")
+      // Redirecionamento seguro no client
+      window.location.href = "/login"
     } catch (err) {
       console.error(err)
-      showNotification("Erro ao conectar com o servidor", "error");
+      showNotification("Erro ao conectar com o servidor", "error")
     } finally {
       setLoading(false)
     }
   }
-
 
   const updateField = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -133,6 +132,7 @@ export default function CompanyRegisterPage() {
             required
           />
         </div>
+
         <Button type="submit" disabled={loading} className="text-white w-full mt-5">
           {loading ? "Criando conta..." : "Criar conta"}
         </Button>

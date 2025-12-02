@@ -6,6 +6,7 @@ import SelectField from "@/components/select-field"
 import Button from "@/components/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import apiUrl from "../api/apiUrl";
 
 interface RegisterFormProps {
   type: "aluno" | "empresa"
@@ -92,7 +93,7 @@ export default function RegisterForm({ type }: RegisterFormProps) {
       if (type === "aluno") {
         const student = formData as StudentFormData
 
-        const response = await fetch("http://localhost:8080/api/auth/register/aluno", {
+        const response = await fetch(`${apiUrl}/auth/register/aluno`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -114,7 +115,7 @@ export default function RegisterForm({ type }: RegisterFormProps) {
       } else {
         const company = formData as CompanyFormData
 
-        const response = await fetch("http://localhost:8080/api/auth/register/empresa", {
+        const response = await fetch(`${apiUrl}/auth/register/empresa`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -259,7 +260,7 @@ export default function RegisterForm({ type }: RegisterFormProps) {
         required
       />
 
-      <Button type="submit" fullWidth disabled={loading}>
+      <Button type="submit">
         {loading ? "Criando conta..." : "Criar conta"}
       </Button>
 

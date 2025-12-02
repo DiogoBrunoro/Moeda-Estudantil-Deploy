@@ -8,6 +8,7 @@ import Button from "@/components/button"
 import { useRouter } from "next/navigation"
 import type { Transaction } from "@/types"
 import { Balance } from "@mui/icons-material"
+import apiUrl from "../../../api/apiUrl";
 
 interface Professor {
   nome: string
@@ -39,14 +40,14 @@ export default function ProfessorDashboard() {
         if (!token) throw new Error("Token não encontrado")
 
         // 🔹 1️⃣ Buscar perfil do professor
-        const resPerfil = await fetch("http://localhost:8080/api/professor/perfil", {
+        const resPerfil = await fetch(`${apiUrl}/professor/perfi`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!resPerfil.ok) throw new Error("Erro ao buscar perfil do professor")
         const perfilData = await resPerfil.json()
 
         // 🔹 2️⃣ Buscar extrato de transações
-        const resExtrato = await fetch("http://localhost:8080/api/professor/extrato", {
+        const resExtrato = await fetch(`${apiUrl}/professor/extrato`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!resExtrato.ok) throw new Error("Erro ao buscar transações")

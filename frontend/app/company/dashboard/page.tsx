@@ -8,6 +8,7 @@ import RedemptionItem from "@/components/redemption-item"
 import Button from "@/components/button"
 import { useRouter } from "next/navigation"
 import type { Advantage, Redemption } from "@/types"
+import apiUrl from "../../../api/apiUrl";
 
 export default function CompanyDashboard() {
   const router = useRouter()
@@ -27,7 +28,7 @@ export default function CompanyDashboard() {
         }
 
         // Buscar perfil da empresa
-        const profileRes = await fetch("http://localhost:8080/api/empresa/perfil", {
+        const profileRes = await fetch(`${apiUrl}/empresa/perfil`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -40,7 +41,7 @@ export default function CompanyDashboard() {
         setCompany(profileData)
 
         // Buscar vantagens
-        const advantagesRes = await fetch("http://localhost:8080/api/empresa/vantagens", {
+        const advantagesRes = await fetch(`${apiUrl}/empresa/vantagens`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -58,7 +59,7 @@ export default function CompanyDashboard() {
         }
 
         // Buscar resgates
-        const redemptionsRes = await fetch("http://localhost:8080/api/empresa/resgates", {
+        const redemptionsRes = await fetch(`${apiUrl}/empresa/resgates`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

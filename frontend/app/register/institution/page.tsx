@@ -9,6 +9,7 @@ import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import Link from "next/link"
 import { useNotification } from "@/context/NotificationContext"
+import apiUrl from "../../../api/apiUrl";
 
 export default function InstitutionRegisterPage() {
   const router = useRouter()
@@ -34,7 +35,7 @@ export default function InstitutionRegisterPage() {
 
     try {
       // Endpoint para registrar a instituição (ajuste se necessário)
-      const response = await fetch("http://localhost:8080/api/auth/register/instituicao", {
+      const response = await fetch(`${apiUrl}/auth/register/instituicao`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

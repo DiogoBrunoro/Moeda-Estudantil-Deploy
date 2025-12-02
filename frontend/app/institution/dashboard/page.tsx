@@ -5,8 +5,9 @@ import DashboardLayout from "@/components/dashboard-layout"
 import StatCard from "@/components/stat-card"
 import Button from "@/components/button"
 import { useRouter } from "next/navigation"
+import apiUrl1 from "../../../api/apiUrl";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api"
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || `${apiUrl1}`	
 
 interface Professor {
   id: number
