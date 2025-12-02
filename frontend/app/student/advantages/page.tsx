@@ -27,7 +27,7 @@ export default function StudentAdvantagesPage() {
       try {
         const alunoBuscado = await getAlunoData()
         setAluno(alunoBuscado)
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Erro ao buscar aluno:", err)
         setAluno(null)
       }
@@ -42,11 +42,14 @@ export default function StudentAdvantagesPage() {
         // Usa a nova função da API
         const data = await getVantagensParaAluno()
         setAdvantages(data) // Os dados já vêm mapeados da API
-      } catch (err: any) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message) // ✅ seguro
+        } else {
+          setError("Erro desconhecido") // fallback
+        }
       }
+      
     }
 
     fetchAdvantages()
@@ -118,13 +121,12 @@ export default function StudentAdvantagesPage() {
             : advWithStatus
         )
       )
-    } catch (err: any) {
-      console.error("Erro ao resgatar vantagem:", err)
-      
-      // A lógica de erro do 'resgatarVantagem' já trata "saldo insuficiente"
-      alert(err.message || "Não foi possível resgatar a vantagem. Tente novamente.")
-    } finally {
-      setRedeemingId(null)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message) // ✅ seguro
+      } else {
+        setError("Erro desconhecido") // fallback
+      }
     }
   }
 

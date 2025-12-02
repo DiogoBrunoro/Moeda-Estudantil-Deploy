@@ -36,11 +36,14 @@ export default function ProfessorTransactionsPage() {
   
 
       setTransactions(transData)
-      } catch (err: any) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message) 
+        } else {
+          setError("Erro desconhecido") 
+        }
       }
+      
     }
 
     fetchData()
