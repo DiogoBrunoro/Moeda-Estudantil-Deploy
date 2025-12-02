@@ -36,15 +36,16 @@ func main() {
 	// Configura CORS
 	r.Use(cors.New(cors.Config{
 		AllowOriginFunc: func(origin string) bool {
-			// Permite localhost e você pode adicionar a URL do frontend deployado
+			// Permite localhost e o frontend deployado no Vercel
 			return strings.HasPrefix(origin, "http://localhost:3000") ||
-				strings.HasPrefix(origin, "https://SEU_FRONTEND.onrender.com")
+				strings.HasPrefix(origin, "https://moeda-estudantil-deploy.vercel.app")
 		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+	
 
 	// Configura rotas
 	routes.SetupRoutes(r, c)
