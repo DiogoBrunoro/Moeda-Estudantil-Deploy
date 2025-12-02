@@ -13,6 +13,7 @@ interface TextFieldProps {
   multiline?: boolean
   rows?: number
   readOnly?: boolean
+  helperText?: string
 }
 
 export default function TextField({
@@ -28,6 +29,7 @@ export default function TextField({
   multiline = false,
   rows = 3,
   readOnly = false,
+  helperText,
 }: TextFieldProps) {
   // estilo condicional
   const baseStyle = `
@@ -75,6 +77,7 @@ export default function TextField({
           }`}
         />
       )}
+      
 
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
