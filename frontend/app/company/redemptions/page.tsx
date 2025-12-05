@@ -4,6 +4,7 @@ import { useState } from "react"
 import DashboardLayout from "@/components/dashboard-layout"
 import RedemptionItem from "@/components/redemption-item"
 import type { Redemption } from "@/types"
+import { useNotification } from "@/context/NotificationContext"
 
 const mockCompany = {
   name: "Tech Store",
@@ -65,11 +66,12 @@ const mockRedemptions: Redemption[] = [
 
 export default function CompanyRedemptionsPage() {
   const [filter, setFilter] = useState<"all" | "pending" | "completed">("all")
+  const { showNotification } = useNotification();
 
   const filteredRedemptions = mockRedemptions.filter((r) => filter === "all" || r.status === filter)
 
   const handleCompleteRedemption = (redemption: Redemption) => {
-    alert(`Resgate confirmado!\n\nCódigo: ${redemption.code}\nAluno: ${redemption.studentName}`)
+    showNotification(`Resgate confirmado!\n\nCódigo: ${redemption.code}\nAluno: ${redemption.studentName}`, "success")
   }
 
   const totalRedemptions = mockRedemptions.length

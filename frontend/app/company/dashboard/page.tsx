@@ -9,6 +9,7 @@ import Button from "@/components/button"
 import { useRouter } from "next/navigation"
 import type { Advantage, Redemption } from "@/types"
 import apiUrl from "../../../api/apiUrl";
+import {useNotification} from "@/context/NotificationContext";
 
 export default function CompanyDashboard() {
   const router = useRouter()
@@ -16,6 +17,8 @@ export default function CompanyDashboard() {
   const [company, setCompany] = useState<any>(null)
   const [advantages, setAdvantages] = useState<Advantage[]>([])
   const [redemptions, setRedemptions] = useState<Redemption[]>([])
+
+  const {showNotification} = useNotification();
 
   // 🔹 Busca o nome da empresa e as vantagens pelo token
   useEffect(() => {
@@ -90,7 +93,7 @@ export default function CompanyDashboard() {
   }, [])
 
   const handleCompleteRedemption = (redemption: Redemption) => {
-    alert(`Resgate confirmado!\n\nCódigo: ${redemption.code}\nAluno: ${redemption.studentName}`)
+    showNotification(`Resgate confirmado!\n\nCódigo: ${redemption.code}\nAluno: ${redemption.studentName}`, "success");
   }
 
   if (loading) {

@@ -40,7 +40,7 @@ export default function ProfessorDashboard() {
         if (!token) throw new Error("Token não encontrado")
 
         // 🔹 1️⃣ Buscar perfil do professor
-        const resPerfil = await fetch(`${apiUrl}/professor/perfi`, {
+        const resPerfil = await fetch(`${apiUrl}/professor/perfil`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!resPerfil.ok) throw new Error("Erro ao buscar perfil do professor")

@@ -5,6 +5,7 @@ import DashboardLayout from "@/components/dashboard-layout"
 import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import apiUrl from "../../../api/apiUrl";
+import {useNotification} from "@/context/NotificationContext";
 
 export default function AlunoProfilePage() {
   const [loading, setLoading] = useState(true)
@@ -12,6 +13,7 @@ export default function AlunoProfilePage() {
   const [editMode, setEditMode] = useState(false)
   const [isSaving, setIsSaving] = useState(false) 
   const [isDeleting, setIsDeleting] = useState(false) 
+  const { showNotification } = useNotification();
   
 
   const [formData, setFormData] = useState({
@@ -94,7 +96,7 @@ export default function AlunoProfilePage() {
         throw new Error(err.error || "Erro ao salvar alterações.")
       }
 
-      alert("Dados atualizados com sucesso!")
+      showNotification("Dados atualizados com sucesso!", "success")
       setEditMode(false)
       window.location.reload()
     } catch (err) {
@@ -129,7 +131,7 @@ export default function AlunoProfilePage() {
         throw new Error(err.error || "Erro ao deletar conta.")
       }
 
-      alert("Conta deletada com sucesso!")
+      showNotification("Conta deletada com sucesso!", "success")
       localStorage.removeItem("token")
       window.location.href = "/login"
     } catch (err) {

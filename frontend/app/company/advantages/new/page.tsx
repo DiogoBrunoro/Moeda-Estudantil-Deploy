@@ -6,6 +6,7 @@ import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import { useRouter } from "next/navigation"
 import apiUrl from "../../../../api/apiUrl";
+import {useNotification} from "@/context/NotificationContext";
 
 
 
@@ -14,6 +15,7 @@ export default function NewAdvantagePage() {
   const router = useRouter() 
   const [loading, setLoading] = useState(false)
   const [company, setCompany] = useState<any>(null)
+  const { showNotification } = useNotification();
 
   const [formData, setFormData] = useState({
     titulo: "",
@@ -95,7 +97,7 @@ export default function NewAdvantagePage() {
         throw new Error(result.error || "Erro ao cadastrar vantagem")
       }
 
-      alert("✅ Vantagem cadastrada com sucesso!")
+      showNotification("Vantagem cadastrada com sucesso!", "success");
       router.push("/company/advantages")
     } catch (err) {
       console.error("❌ Erro ao cadastrar vantagem:", err)

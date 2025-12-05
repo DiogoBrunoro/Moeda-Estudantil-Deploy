@@ -7,6 +7,7 @@ import Button from "@/components/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import apiUrl from "../api/apiUrl";
+import {useNotification} from "@/context/NotificationContext";
 
 interface RegisterFormProps {
   type: "aluno" | "empresa"
@@ -50,6 +51,7 @@ const mockCourses = [
 export default function RegisterForm({ type }: RegisterFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const { showNotification } = useNotification();
 
   // 🔹 Tipagem explícita aqui resolve o erro
   const [formData, setFormData] = useState<StudentFormData | CompanyFormData>(
@@ -84,7 +86,7 @@ export default function RegisterForm({ type }: RegisterFormProps) {
     setLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
-      alert("As senhas não coincidem")
+      showNotification("As senhas não coincidem", "warning")
       setLoading(false)
       return
     }
@@ -134,10 +136,10 @@ export default function RegisterForm({ type }: RegisterFormProps) {
         }
       }
 
-      alert(`${type === "aluno" ? "Aluno" : "Empresa"} criado com sucesso!`)
+      showNotification(`${type === "aluno" ? "Aluno" : "Empresa"} criado com sucesso!`, "success")
       router.push("/login")
     } catch (err: any) {
-      alert(err.message || "Erro ao conectar com o servidor")
+      showNotification(err.message || "Erro ao conectar com o servidor", "error")
     } finally {
       setLoading(false)
     }

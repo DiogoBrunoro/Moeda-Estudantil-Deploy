@@ -8,6 +8,7 @@ import SelectField from "@/components/select-field"
 import Button from "@/components/button"
 import Link from "next/link"
 import apiUrl from "../../../api/apiUrl";
+import {useNotification} from "@/context/NotificationContext";
 
 const mockDepartments = [
   { value: "eng-software", label: "Engenharia de Software" },
@@ -20,6 +21,7 @@ export default function ProfessorRegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [institution, setInstitution] = useState<{ id: number; nome: string } | null>(null)
+  const { showNotification } = useNotification();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -54,7 +56,7 @@ export default function ProfessorRegisterPage() {
     setLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
-      alert("As senhas não coincidem")
+      showNotification("As senhas não coincidem", "warning")
       setLoading(false)
       return
     }
@@ -91,7 +93,7 @@ export default function ProfessorRegisterPage() {
         return
       }
 
-      alert("✅ Professor criado com sucesso!")
+      showNotification("Professor criado com sucesso!", "success")
     } catch (err) {
       console.error("❌ Erro:", err)
       alert("Erro ao conectar com o servidor")

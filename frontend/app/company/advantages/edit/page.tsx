@@ -6,13 +6,14 @@ import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import { useRouter } from "next/navigation"
 import apiUrl from "../../../../api/apiUrl"
+import { useSearchParams } from "next/navigation";
+import {useNotification} from "@/context/NotificationContext";
 
-interface PageProps {
-  params: { id: string }
-}
+export default function EditAdvantagePage() {
+  const searchParams = useSearchParams()
+  const id = searchParams.get("id")
 
-export default function EditAdvantagePage({ params }: PageProps) {
-  const id = params.id
+  const { showNotification } = useNotification();
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [company, setCompany] = useState<any>(null)
@@ -27,12 +28,15 @@ export default function EditAdvantagePage({ params }: PageProps) {
   })
 
   useEffect(() => {
-    if (!id) return
+    if (!id) {
+      console.log("Cheguei")
+      return
+    }
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
-          alert("Token não encontrado. Faça login novamente.")
+          showNotification("Token não encontrado. Faça login novamente.", "error");
           router.push("/login")
           return
         }
@@ -59,7 +63,7 @@ export default function EditAdvantagePage({ params }: PageProps) {
         })
       } catch (err) {
         console.error("❌ Erro ao carregar dados:", err)
-        alert("Erro ao carregar dados da vantagem.")
+        showNotification("Erro ao carregar dados da vantagem.", "error");
       } finally {
         setLoadingData(false)
       }
@@ -78,7 +82,7 @@ export default function EditAdvantagePage({ params }: PageProps) {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        alert("Token não encontrado. Faça login novamente.")
+        showNotification("Token não encontrado. Faça login novamente.", "error");
         router.push("/login")
         return
       }
@@ -107,16 +111,18 @@ export default function EditAdvantagePage({ params }: PageProps) {
       const result = await response.json()
       if (!response.ok) throw new Error(result.error || "Erro ao atualizar vantagem")
 
-      alert("✅ Vantagem atualizada com sucesso!")
+      showNotification("Vantagem atualizada com sucesso!", "success");
       router.push("/company/advantages")
     } catch (err) {
       console.error("❌ Erro ao atualizar:", err)
-      alert(`Erro ao atualizar vantagem. ${err instanceof Error ? err.message : "Verifique os campos."}`)
+      showNotification(`Erro ao atualizar vantagem. ${err instanceof Error ? err.message : "Verifique os campos."}`, "error");
     } finally {
       setLoading(false)
     }
   }
 
+  console.log("Company data:", company)
+  console.log("Form data:", loadingData)
   if (loadingData || !company) {
     return (
       <DashboardLayout userType="company" userName="Carregando...">

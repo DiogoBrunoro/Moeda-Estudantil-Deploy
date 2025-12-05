@@ -8,11 +8,14 @@ import { Student, type Advantage } from "@/types"
 // ALTERADO: Importe a nova função e o novo tipo
 import { getAlunoData, resgatarVantagem, getVantagensParaAluno, type AdvantageWithStatus } from "@/api/alunoApi"
 import LoadingSpinner from "@/components/loading-spinner"
+import {useNotification} from "@/context/NotificationContext";
 
 export default function StudentAdvantagesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [aluno, setAluno] = useState<Student | null>(null)
+
+  const { showNotification } = useNotification();
   
   // ALTERADO: O estado agora armazena o DTO completo
   const [advantages, setAdvantages] = useState<AdvantageWithStatus[]>([]) 
@@ -27,6 +30,7 @@ export default function StudentAdvantagesPage() {
       try {
         const alunoBuscado = await getAlunoData()
         setAluno(alunoBuscado)
+        setLoading(false)
       } catch (err: unknown) {
         console.error("Erro ao buscar aluno:", err)
         setAluno(null)
@@ -41,7 +45,9 @@ export default function StudentAdvantagesPage() {
       try {
         // Usa a nova função da API
         const data = await getVantagensParaAluno()
+
         setAdvantages(data) // Os dados já vêm mapeados da API
+        setLoading(false)
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message) // ✅ seguro
@@ -64,6 +70,7 @@ export default function StudentAdvantagesPage() {
     return matchesSearch
   })
 
+
   // 🎁 Resgatar vantagem
   const handleRedeem = async (advantage: Advantage) => {
     if (redeemingId) return
@@ -75,12 +82,12 @@ export default function StudentAdvantagesPage() {
     // Validação de resgate duplicado (extra)
     const advStatus = advantages.find(a => a.vantagem.id === advantage.id)
     if (advStatus?.ja_resgatada) {
-       alert("Você já resgatou esta vantagem.")
+       showNotification("Você já resgatou esta vantagem.", "warning")
        return
     }
 
     if (aluno.saldo_moedas < advantage.cost) {
-      alert("Saldo insuficiente para resgatar esta vantagem.")
+      showNotification("Saldo insuficiente para resgatar esta vantagem.", "warning")
       return
     }
 
@@ -102,8 +109,9 @@ export default function StudentAdvantagesPage() {
         }
       })
 
-      alert(
+      showNotification(
         `Vantagem "${advantage.title}" resgatada com sucesso!\n\nUm email com o cupom será enviado para você!`,
+        "success"
       )
 
       // ALTERADO: Atualiza o estado local para marcar como resgatada
@@ -173,6 +181,7 @@ export default function StudentAdvantagesPage() {
 
         {/* ALTERADO: Grid de Vantagens agora usa o DTO */}
         {!loading && !error && (
+         
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAdvantages.map((advantageWithStatus) => (
               <AdvantageCard

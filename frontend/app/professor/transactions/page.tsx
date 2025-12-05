@@ -19,7 +19,7 @@ export default function ProfessorTransactionsPage() {
         const token = localStorage.getItem("token")
 
         // 1️⃣ Busca perfil do professor
-        const profileRes = await fetch(`${apiUrl}/professor/perfi`, {
+        const profileRes = await fetch(`${apiUrl}/professor/perfil`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!profileRes.ok) throw new Error("Erro ao carregar perfil")
@@ -43,6 +43,8 @@ export default function ProfessorTransactionsPage() {
         } else {
           setError("Erro desconhecido") 
         }
+      }finally {
+        setLoading(false) 
       }
       
     }

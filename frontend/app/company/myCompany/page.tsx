@@ -6,6 +6,7 @@ import TextField from "@/components/text-field"
 import Button from "@/components/button"
 import { Email } from "@mui/icons-material"
 import apiUrl from "../../../api/apiUrl";
+import {useNotification} from "@/context/NotificationContext";
 
 export default function CompanyProfilePage() {
   const [loading, setLoading] = useState(true)
@@ -18,6 +19,8 @@ export default function CompanyProfilePage() {
     endereco: "",
     descricao: "",
   })
+
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -83,7 +86,7 @@ export default function CompanyProfilePage() {
         throw new Error(err.error || "Erro ao salvar alterações.")
       }
 
-      alert("Dados atualizados com sucesso!")
+      showNotification("Dados atualizados com sucesso!", "success");
       setEditMode(false)
       window.location.reload()
     } catch (err) {
