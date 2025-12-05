@@ -37,8 +37,6 @@ func NewEmailService(cfg *config.Config) *EmailService {
 
 func (s *EmailService) SendEmail(to, subject, body string, inlineImages []InlineImage) error {
 
-	fmt.Printf("API Key: '%s'\n", s.config.MailerSendAPIKey)
-
 	msg := s.client.Email.NewMessage()
 	msg.SetFrom(mailersend.From{ Email: s.config.EmailFrom, Name: s.config.EmailFromName })
 	msg.SetRecipients([]mailersend.Recipient{

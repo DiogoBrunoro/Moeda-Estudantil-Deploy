@@ -123,7 +123,7 @@ func (s *UserService) ForgotPassword(email string) error {
 		return err
 	}
 
-	resetLink := fmt.Sprintf("http://localhost:3000/reset-password?token=%s", resetToken)
+	resetLink := fmt.Sprintf("https://moeda-estudantil-deploy.vercel.app//reset-password?token=%s", resetToken)
 
 	subject := "Recuperação de Senha - Sistema de Moedas"
 	body := fmt.Sprintf(`
