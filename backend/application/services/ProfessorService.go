@@ -4,7 +4,6 @@ import (
 	"backend/adapters/repositories"
 	"backend/application/model"
 	"errors"
-	"backend/emailSender"
 	"fmt"
 )
 
@@ -104,8 +103,5 @@ func (s *ProfessorService) EnviarMoedas(userID uint, input *EnviarMoedasInput) (
 	transacao.Professor = *professor
 	transacao.Aluno = *aluno
 
-
-	emailsender.SendEmail(aluno.User.Email,"aluno",input.Valor)
-	emailsender.SendEmail(professor.User.Email,"professor",input.Valor)
 	return transacao, nil
 }

@@ -12,10 +12,9 @@ import (
 type Config struct {
 	DatabaseURL  string
 	JWTSecret    string
-	SMTPHost     string
-	SMTPPort     string
-	SMTPUser     string
-	SMTPPassword string
+    MailerSendAPIKey string
+    EmailFrom        string
+    EmailFromName    string
 	FrontendURL  string
 }
 
@@ -33,10 +32,9 @@ func LoadConfig() *Config {
 	cfg := &Config{
 		DatabaseURL:  os.Getenv("DATABASE_URL"),
 		JWTSecret:    os.Getenv("JWT_SECRET"),
-		SMTPHost:     os.Getenv("SMTP_HOST"),
-		SMTPPort:     os.Getenv("SMTP_PORT"),
-		SMTPUser:     os.Getenv("SMTP_USER"),
-		SMTPPassword: os.Getenv("SMTP_PASSWORD"),
+		MailerSendAPIKey:     os.Getenv("MailerSendAPIKey"),
+		EmailFrom:     os.Getenv("EmailFrom"),
+		EmailFromName:     os.Getenv("EmailFromName"),
 	}
 
 	return cfg
